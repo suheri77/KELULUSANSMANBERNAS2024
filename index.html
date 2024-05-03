@@ -40,12 +40,12 @@
 
   
 
-  <script>
-    const section = document.querySelector("section"),
-      overlay = document.querySelector(".overlay"),
-      showBtn = document.querySelector(".show-modal"),
-      closeBtn = document.querySelector(".close-btn"),
-      countdown = document.getElementById("countdown");
+ <script>
+   const section = document.querySelector("section");
+const overlay = document.querySelector(".overlay");
+const showBtn = document.querySelector(".show-modal");
+const closeBtn = document.querySelector(".close-btn");
+const countdown = document.getElementById("countdown");
 
 showBtn.addEventListener("click", () => {
   section.classList.add("active");
@@ -60,77 +60,45 @@ closeBtn.addEventListener("click", () =>
   section.classList.remove("active")
 );
 
-function startCountdown() {
-  let targetDateString = getCookie("countdownTarget"); // Mengambil waktu target dari cookie
 
-  let targetDate;
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
 
-  if (targetDateString) {
-    targetDate = new Date(targetDateString);
-  } else {
-    // Tanggal dan waktu target default untuk penghitung mundur
-    targetDate = new Date();
-    targetDate.setHours(targetDate.getHours() + 1); // Tambahkan 1 jam dari waktu sekarang
-    targetDate.setDate(targetDate.getDate() + 1); // Tambahkan 1 hari dari tanggal sekarang
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
 
-    // Simpan waktu target ke cookie untuk digunakan di masa depan
-    setCookie("countdownTarget", targetDate.toISOString(), 365); // Cookie akan berlaku selama 365 hari
-  }
+        display.textContent = minutes + ":" + seconds;
 
-  const countdownInterval = setInterval(() => {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
+        // Mengurangi timer
+        if (--timer < 0) {
+            timer = duration;
+        }
 
-    // Hitung waktu yang tersisa
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        // Menyimpan timer pada local storage
+        localStorage.setItem('timer', timer);
+    }, 1000);
+}
 
-    countdown.textContent = `Redirecting in ${hours}h ${minutes}m ${seconds}s`;
+window.onload = function () {
+    var fiveMinutes = 60 * 5;
 
-    // Jika waktu sudah habis, lakukan redirect dan hentikan penghitung mundur
-    if (distance < 0) {
-      clearInterval(countdownInterval);
-      window.location.href = "https://example.com"; // Ganti URL dengan URL yang diinginkan
+    // Mengecek apakah timer sebelumnya telah disimpan di local storage
+    var storedTimer = localStorage.getItem('timer');
 
-      // Hapus waktu target dari cookie setelah timer selesai
-      deleteCookie("countdownTarget");
+    if (storedTimer !== null) {
+        // Jika timer telah disimpan, gunakan nilainya
+        startTimer(storedTimer, countdown);
+    } else {
+        // Jika tidak ada timer yang disimpan, mulai dari awal
+        startTimer(fiveMinutes, countdown);
     }
-  }, 1000);
-}
-
-// Fungsi untuk mengatur cookie
-function setCookie(name, value, days) {
-  const date = new Date();
-  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-  const expires = "expires=" + date.toUTCString();
-  document.cookie = name + "=" + value + ";" + expires + ";path=/";
-}
-
-// Fungsi untuk mendapatkan nilai cookie
-function getCookie(name) {
-  const cookieName = name + "=";
-  const decodedCookie = decodeURIComponent(document.cookie);
-  const cookieArray = decodedCookie.split(';');
-  for(let i = 0; i < cookieArray.length; i++) {
-    let cookie = cookieArray[i];
-    while (cookie.charAt(0) == ' ') {
-      cookie = cookie.substring(1);
-    }
-    if (cookie.indexOf(cookieName) == 0) {
-      return cookie.substring(cookieName.length, cookie.length);
-    }
-  }
-  return "";
-}
-
-// Fungsi untuk menghapus cookie
-function deleteCookie(name) {
-  document.cookie = name + '=; Max-Age=-99999999;';
-}
+};
 
 
 
-  </script>
+</script>
 </body>
 </html>
