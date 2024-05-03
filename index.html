@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!-- Coding by CodingLab | www.codinglabweb.com-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Popup Modal Box</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Fontawesome CDN Link -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+</head>
+<body>
+
+  <img src="SK .jpeg" alt="" style="width: 1000x; height: 1050px;">
+  
+  <section>
+    <button class="show-modal">Klik disini untuk Hasil Kelulusan SMAN BERNAS BINSUS Provinsi Riau</button>
+    <span class="overlay"></span>
+
+    <div class="modal-box">
+      <i class="fa-regular fa-circle-check"></i>
+      <h2>SMAN BERNAS BINSUS </h2>
+      <h2>PROVINSI RIAU</h2>
+      <h3>Kamu akan melihat hasil dari kelulusan SMAN BERNAS BINSUS dalam waktu hitungan mundur.</h3>
+
+      <!-- Countdown Timer -->
+      <div id="countdown"></div>
+
+      <div class="buttons">
+        <button class="close-btn">Ok, tutup</button>
+        <button>Sabar Menunggu</button>
+      </div>
+    </div>
+  </section>
+
+
+  
+
+  <script>
+    const section = document.querySelector("section"),
+      overlay = document.querySelector(".overlay"),
+      showBtn = document.querySelector(".show-modal"),
+      closeBtn = document.querySelector(".close-btn"),
+      countdown = document.getElementById("countdown");
+
+    showBtn.addEventListener("click", () => {
+      section.classList.add("active");
+      startCountdown();
+    });
+
+    overlay.addEventListener("click", () =>
+      section.classList.remove("active")
+    );
+
+    closeBtn.addEventListener("click", () =>
+      section.classList.remove("active")
+    );
+
+    function startCountdown() {
+  let targetDateString = localStorage.getItem("countdownTarget");
+  let targetDate;
+
+  if (targetDateString) {
+    targetDate = new Date(targetDateString);
+  } else {
+    // Tanggal dan waktu target default untuk penghitung mundur
+    targetDate = new Date();
+    targetDate.setHours(targetDate.getHours() + 1); // Tambahkan 1 jam dari waktu sekarang
+    targetDate.setDate(targetDate.getDate() + 1); // Tambahkan 1 hari dari tanggal sekarang
+
+    // Simpan waktu target ke localStorage untuk digunakan di masa depan
+    localStorage.setItem("countdownTarget", targetDate.toISOString());
+  }
+
+  const countdownInterval = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    // Hitung waktu yang tersisa
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    countdown.textContent = `Redirecting in ${hours}h ${minutes}m ${seconds}s`;
+
+    // Jika waktu sudah habis, lakukan redirect dan hentikan penghitung mundur
+    if (distance < 0) {
+      clearInterval(countdownInterval);
+      window.location.href = "https://example.com"; // Ganti URL dengan URL yang diinginkan
+
+      // Hapus waktu target dari localStorage setelah timer selesai
+      localStorage.removeItem("countdownTarget");
+    }
+  }, 1000);
+}
+
+
+  </script>
+</body>
+</html>
