@@ -41,64 +41,51 @@
   
 
  <script>
-   const section = document.querySelector("section");
-const overlay = document.querySelector(".overlay");
-const showBtn = document.querySelector(".show-modal");
-const closeBtn = document.querySelector(".close-btn");
-const countdown = document.getElementById("countdown");
+    const section = document.querySelector("section"),
+      overlay = document.querySelector(".overlay"),
+      showBtn = document.querySelector(".show-modal"),
+      closeBtn = document.querySelector(".close-btn"),
+      countdown = document.getElementById("countdown");
 
-showBtn.addEventListener("click", () => {
-  section.classList.add("active");
-  startCountdown();
-});
+    let countdownInterval;
 
-overlay.addEventListener("click", () =>
-  section.classList.remove("active")
-);
+    showBtn.addEventListener("click", () => {
+      section.classList.add("active");
+      startCountdown();
+    });
 
-closeBtn.addEventListener("click", () =>
-  section.classList.remove("active")
-);
+    overlay.addEventListener("click", () => {
+      section.classList.remove("active");
+      clearInterval(countdownInterval); // Hentikan interval ketika modal ditutup
+    });
 
+    closeBtn.addEventListener("click", () => {
+      section.classList.remove("active");
+      clearInterval(countdownInterval); // Hentikan interval ketika modal ditutup
+    });
 
-function startTimer(duration, display) {
-    var timer = duration, minutes, seconds;
-    setInterval(function () {
-        minutes = parseInt(timer / 60, 10);
-        seconds = parseInt(timer % 60, 10);
+    function startCountdown() {
+      // Tanggal dan waktu target untuk penghitung mundur (5 menit dari waktu sekarang)
+      const targetDate = new Date();
+      targetDate.setMinutes(targetDate.getMinutes() + 5);
 
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
+      countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
 
-        display.textContent = minutes + ":" + seconds;
+        // Hitung waktu yang tersisa
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        // Mengurangi timer
-        if (--timer < 0) {
-            timer = duration;
+        countdown.textContent = `Redirecting in ${minutes}m ${seconds}s`;
+
+        // Jika waktu sudah habis, lakukan redirect dan hentikan penghitung mundur
+        if (distance < 0) {
+          clearInterval(countdownInterval);
+          window.location.href = "https://example.com"; // Ganti URL dengan URL yang diinginkan
         }
-
-        // Menyimpan timer pada local storage
-        localStorage.setItem('timer', timer);
-    }, 1000);
-}
-
-window.onload = function () {
-    var fiveMinutes = 60 * 5;
-
-    // Mengecek apakah timer sebelumnya telah disimpan di local storage
-    var storedTimer = localStorage.getItem('timer');
-
-    if (storedTimer !== null) {
-        // Jika timer telah disimpan, gunakan nilainya
-        startTimer(storedTimer, countdown);
-    } else {
-        // Jika tidak ada timer yang disimpan, mulai dari awal
-        startTimer(fiveMinutes, countdown);
+      }, 1000);
     }
-};
-
-
-
-</script>
+  </script>
 </body>
 </html>
