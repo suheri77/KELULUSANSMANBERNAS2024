@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SMAN BERNAS</title>
+  <title>Popup Modal Box</title>
 
   <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
@@ -18,14 +18,14 @@
   <img src="SK .jpeg" alt="" style="width: 1000x; height: 1050px;">
   
   <section>
-    <button class="show-modal">Klik disini untuk melihat Hasil Kelulusan SMAN BERNAS BINSUS Provinsi Riau 2024</button>
+    <button class="show-modal">Klik disini untuk Hasil Kelulusan SMAN BERNAS BINSUS Provinsi Riau</button>
     <span class="overlay"></span>
 
     <div class="modal-box">
       <i class="fa-regular fa-circle-check"></i>
       <h2>SMAN BERNAS BINSUS </h2>
       <h2>PROVINSI RIAU</h2>
-      <h3>Kamu akan melihat hasil dari kelulusan SMAN BERNAS BINSUS dalam waktu hitungan mundur (BERDOA).</h3>
+      <h3>Kamu akan melihat hasil dari kelulusan SMAN BERNAS BINSUS dalam waktu hitungan mundur.</h3>
 
       <!-- Countdown Timer -->
       <div id="countdown"></div>
@@ -40,7 +40,7 @@
 
   
 
- <script>
+  <script>
     const section = document.querySelector("section"),
       overlay = document.querySelector(".overlay"),
       showBtn = document.querySelector(".show-modal"),
@@ -65,27 +65,28 @@
     });
 
     function startCountdown() {
-      // Tanggal dan waktu target untuk penghitung mundur (5 menit dari waktu sekarang)
-      const targetDate = new Date();
-      targetDate.setMinutes(targetDate.getMinutes() + 5);
+  // Tanggal dan waktu target untuk penghitung mundur (1 menit dari waktu sekarang)
+  const targetDate = new Date();
+  targetDate.setMinutes(targetDate.getMinutes() + 1);
 
-      countdownInterval = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = targetDate - now;
+  countdownInterval = setInterval(() => {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
 
-        // Hitung waktu yang tersisa
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    // Hitung waktu yang tersisa
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        countdown.textContent = `Redirecting in ${minutes}m ${seconds}s`;
+    countdown.textContent = `Redirecting in ${minutes}m ${seconds}s`;
 
-        // Jika waktu sudah habis, lakukan redirect dan hentikan penghitung mundur
-        if (distance < 0) {
-          clearInterval(countdownInterval);
-          window.location.href = "https://suheri77.github.io/halamankelulusanSMANBernas2024/"; // Ganti URL dengan URL yang diinginkan
-        }
-      }, 1000);
+    // Jika waktu sudah habis, lakukan redirect dan hentikan penghitung mundur
+    if (distance < 0) {
+      clearInterval(countdownInterval);
+      window.location.href = "https://example.com"; // Ganti URL dengan URL yang diinginkan
     }
+  }, 1000);
+}
+
   </script>
 </body>
 </html>
